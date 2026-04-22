@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import confetti from 'canvas-confetti';
 import { 
-  Brain, 
-  Gamepad2, 
   CheckCircle2, 
   XCircle, 
   ArrowRight, 
   RotateCcw, 
   Home,
   Star,
-  Zap,
-  BookOpen
+  Fish,
+  Waves,
+  Anchor,
+  Droplets
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -128,9 +128,9 @@ const TRANSLATION_DATA = [
 // --- COMPONENTS ---
 
 const ProgressBar = ({ current, total }: { current: number; total: number }) => (
-  <div className="w-full bg-gray-200 rounded-full h-4 mb-6 overflow-hidden border-2 border-gray-300">
+  <div className="w-full bg-slate-200 rounded-full h-4 mb-6 overflow-hidden border-2 border-cyan-200">
     <motion.div 
-      className="bg-gradient-to-r from-yellow-400 to-orange-500 h-full rounded-full"
+      className="bg-gradient-to-r from-teal-400 to-blue-500 h-full rounded-full"
       initial={{ width: 0 }}
       animate={{ width: `${(current / total) * 100}%` }}
       transition={{ type: 'spring', stiffness: 50 }}
@@ -154,8 +154,8 @@ const SuccessScreen = ({ onHome, score, total }: { onHome: () => void, score?: n
       }
 
       const particleCount = 50 * (timeLeft / duration);
-      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount, colors: ['#06b6d4', '#14b8a6', '#0ea5e9', '#3b82f6', '#fb7185'], origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount, colors: ['#06b6d4', '#14b8a6', '#0ea5e9', '#3b82f6', '#fb7185'], origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
     }, 250);
 
     return () => clearInterval(interval);
@@ -165,23 +165,23 @@ const SuccessScreen = ({ onHome, score, total }: { onHome: () => void, score?: n
     <motion.div 
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col items-center justify-center p-8 bg-white rounded-3xl shadow-2xl text-center max-w-md w-full border-4 border-yellow-400"
+      className="flex flex-col items-center justify-center p-8 bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl text-center max-w-md w-full border-4 border-teal-400 relative z-10"
     >
-      <div className="bg-yellow-100 p-6 rounded-full mb-6">
-        <Star className="w-20 h-20 text-yellow-500 fill-yellow-500" />
+      <div className="bg-rose-100 p-6 rounded-full mb-6">
+        <Star className="w-20 h-20 text-rose-400 fill-rose-400" />
       </div>
-      <h2 className="text-4xl font-black text-gray-800 mb-4 tracking-tight">¡Excelente!</h2>
-      <p className="text-xl text-gray-600 mb-8 font-medium">
+      <h2 className="text-4xl font-black text-slate-800 mb-4 tracking-tight">¡Excelente!</h2>
+      <p className="text-xl text-slate-600 mb-8 font-medium">
         You completed the challenge!
         {score !== undefined && total !== undefined && (
-          <span className="block mt-2 text-2xl font-bold text-blue-600">Score: {score}/{total}</span>
+          <span className="block mt-2 text-2xl font-bold text-teal-600">Score: {score}/{total}</span>
         )}
       </p>
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={onHome}
-        className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transition-all"
+        className="flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 text-white px-8 py-4 rounded-2xl font-bold text-xl shadow-lg hover:shadow-xl transition-all"
       >
         <Home className="w-6 h-6" />
         Back to Menu
@@ -218,15 +218,15 @@ const Flashcards = ({ onComplete }: { onComplete: () => void }) => {
           onClick={() => setIsFlipped(!isFlipped)}
         >
           {/* Front */}
-          <div className="absolute w-full h-full backface-hidden bg-white rounded-3xl shadow-xl border-4 border-blue-400 flex flex-col items-center justify-center p-8 text-center">
-            <span className="text-sm font-bold text-blue-400 uppercase tracking-wider mb-4">Spanish</span>
-            <h3 className="text-4xl font-black text-gray-800">{cards[currentIndex].es}</h3>
-            <p className="text-gray-400 mt-8 text-sm font-medium animate-pulse">Tap to flip</p>
+          <div className="absolute w-full h-full backface-hidden bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-cyan-400 flex flex-col items-center justify-center p-8 text-center">
+            <span className="text-sm font-bold text-cyan-500 uppercase tracking-wider mb-4">Spanish</span>
+            <h3 className="text-4xl font-black text-slate-800">{cards[currentIndex].es}</h3>
+            <p className="text-cyan-400 mt-8 text-sm font-medium animate-pulse">Tap to flip</p>
           </div>
           
           {/* Back */}
-          <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl shadow-xl border-4 border-indigo-300 flex flex-col items-center justify-center p-8 text-center rotate-y-180">
-            <span className="text-sm font-bold text-indigo-200 uppercase tracking-wider mb-4">English</span>
+          <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl shadow-xl border-4 border-cyan-300 flex flex-col items-center justify-center p-8 text-center rotate-y-180">
+            <span className="text-sm font-bold text-cyan-100 uppercase tracking-wider mb-4">English</span>
             <h3 className="text-4xl font-black text-white">{cards[currentIndex].en}</h3>
           </div>
         </motion.div>
@@ -236,7 +236,7 @@ const Flashcards = ({ onComplete }: { onComplete: () => void }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleNext}
-        className="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
+        className="w-full bg-teal-500 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2 relative z-10"
       >
         {currentIndex === cards.length - 1 ? 'Finish' : 'Next Card'}
         <ArrowRight className="w-6 h-6" />
@@ -277,16 +277,16 @@ const GrammarQuiz = ({ onComplete }: { onComplete: (score: number) => void }) =>
   };
 
   return (
-    <div className="flex flex-col w-full max-w-xl">
+    <div className="flex flex-col w-full max-w-xl relative z-10">
       <ProgressBar current={currentIndex} total={questions.length} />
       
-      <div className="bg-white rounded-3xl shadow-xl p-8 mb-6 border-4 border-purple-400">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 leading-relaxed">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl p-8 mb-6 border-4 border-teal-400">
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 leading-relaxed">
           {currentQ.question.split('_______').map((part, i, arr) => (
             <React.Fragment key={i}>
               {part}
               {i < arr.length - 1 && (
-                <span className="inline-block px-4 py-1 mx-2 bg-gray-100 border-b-4 border-purple-300 rounded-lg text-purple-600 font-black min-w-[80px] text-center">
+                <span className="inline-block px-4 py-1 mx-2 bg-teal-50 border-b-4 border-teal-300 rounded-lg text-teal-700 font-black min-w-[80px] text-center">
                   {selected || '?'}
                 </span>
               )}
@@ -299,11 +299,11 @@ const GrammarQuiz = ({ onComplete }: { onComplete: (score: number) => void }) =>
             const isCorrect = option === currentQ.answer;
             const isSelected = option === selected;
             
-            let btnClass = "bg-gray-50 border-gray-200 text-gray-700 hover:bg-purple-50 hover:border-purple-300";
+            let btnClass = "bg-white border-slate-200 text-slate-700 hover:bg-teal-50 hover:border-teal-300";
             if (selected) {
-              if (isCorrect) btnClass = "bg-green-100 border-green-500 text-green-800";
-              else if (isSelected) btnClass = "bg-red-100 border-red-500 text-red-800";
-              else btnClass = "bg-gray-50 border-gray-200 text-gray-400 opacity-50";
+              if (isCorrect) btnClass = "bg-emerald-100 border-emerald-500 text-emerald-800";
+              else if (isSelected) btnClass = "bg-rose-100 border-rose-500 text-rose-800";
+              else btnClass = "bg-white border-slate-200 text-slate-400 opacity-50";
             }
 
             return (
@@ -319,8 +319,8 @@ const GrammarQuiz = ({ onComplete }: { onComplete: (score: number) => void }) =>
                 )}
               >
                 {option}
-                {selected && isCorrect && <CheckCircle2 className="w-6 h-6 text-green-500" />}
-                {selected && isSelected && !isCorrect && <XCircle className="w-6 h-6 text-red-500" />}
+                {selected && isCorrect && <CheckCircle2 className="w-6 h-6 text-emerald-500" />}
+                {selected && isSelected && !isCorrect && <XCircle className="w-6 h-6 text-rose-500" />}
               </motion.button>
             );
           })}
@@ -331,10 +331,10 @@ const GrammarQuiz = ({ onComplete }: { onComplete: (score: number) => void }) =>
             <motion.div
               initial={{ opacity: 0, height: 0, marginTop: 0 }}
               animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
-              className="bg-blue-50 p-4 rounded-xl border-2 border-blue-200"
+              className="bg-cyan-50 p-4 rounded-xl border-2 border-cyan-200"
             >
-              <p className="text-blue-800 font-medium flex items-center gap-2">
-                <Brain className="w-5 h-5" />
+              <p className="text-cyan-800 font-medium flex items-center gap-2">
+                <Fish className="w-5 h-5" />
                 {currentQ.rule}
               </p>
             </motion.div>
@@ -349,7 +349,7 @@ const GrammarQuiz = ({ onComplete }: { onComplete: (score: number) => void }) =>
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleNext}
-          className="w-full bg-purple-600 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
+          className="w-full bg-teal-600 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
         >
           {currentIndex === questions.length - 1 ? 'Finish' : 'Next Question'}
           <ArrowRight className="w-6 h-6" />
@@ -425,19 +425,19 @@ const SentenceBuilder = ({ onComplete }: { onComplete: () => void }) => {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-2xl">
+    <div className="flex flex-col w-full max-w-2xl relative z-10">
       <ProgressBar current={currentIndex} total={sentences.length} />
       
-      <div className="bg-white rounded-3xl shadow-xl p-8 mb-6 border-4 border-pink-400">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl p-8 mb-6 border-4 border-blue-400">
         <div className="text-center mb-8">
-          <span className="text-pink-500 font-bold uppercase tracking-wider text-sm mb-2 block">Translate this</span>
-          <h3 className="text-3xl font-black text-gray-800">{currentS.en}</h3>
+          <span className="text-blue-500 font-bold uppercase tracking-wider text-sm mb-2 block">Translate this</span>
+          <h3 className="text-3xl font-black text-slate-800">{currentS.en}</h3>
         </div>
 
         {/* Drop zone */}
-        <div className="min-h-[100px] p-4 bg-gray-50 border-4 border-dashed border-gray-300 rounded-2xl mb-8 flex flex-wrap gap-3 items-start content-start">
+        <div className="min-h-[100px] p-4 bg-cyan-50/50 border-4 border-dashed border-cyan-300 rounded-2xl mb-8 flex flex-wrap gap-3 items-start content-start">
           {selectedWords.length === 0 && (
-            <span className="text-gray-400 font-medium w-full text-center mt-4">Tap words below to build the sentence</span>
+            <span className="text-cyan-700/50 font-medium w-full text-center mt-4">Tap words below to build the sentence</span>
           )}
           <AnimatePresence>
             {selectedWords.map((word, i) => (
@@ -447,7 +447,7 @@ const SentenceBuilder = ({ onComplete }: { onComplete: () => void }) => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => handleSelectedClick(word, i)}
-                className="bg-pink-500 text-white px-5 py-3 rounded-xl font-bold text-lg shadow-md hover:bg-pink-600 transition-colors"
+                className="bg-blue-500 text-white px-5 py-3 rounded-xl font-bold text-lg shadow-md hover:bg-blue-600 transition-colors"
               >
                 {word}
               </motion.button>
@@ -465,7 +465,7 @@ const SentenceBuilder = ({ onComplete }: { onComplete: () => void }) => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => handleWordClick(word, i)}
-                className="bg-white border-2 border-gray-200 text-gray-700 px-5 py-3 rounded-xl font-bold text-lg shadow-sm hover:border-pink-400 hover:text-pink-500 transition-colors"
+                className="bg-white border-2 border-slate-200 text-slate-700 px-5 py-3 rounded-xl font-bold text-lg shadow-sm hover:border-blue-400 hover:text-blue-500 transition-colors"
               >
                 {word}
               </motion.button>
@@ -481,7 +481,7 @@ const SentenceBuilder = ({ onComplete }: { onComplete: () => void }) => {
               whileTap={{ scale: 0.98 }}
               onClick={checkAnswer}
               disabled={selectedWords.length === 0}
-              className="flex-1 bg-blue-500 disabled:bg-gray-300 text-white py-4 rounded-2xl font-bold text-xl shadow-lg transition-colors"
+              className="flex-1 bg-cyan-600 disabled:bg-slate-300 text-white py-4 rounded-2xl font-bold text-xl shadow-lg transition-colors"
             >
               Check Answer
             </motion.button>
@@ -490,7 +490,7 @@ const SentenceBuilder = ({ onComplete }: { onComplete: () => void }) => {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               onClick={handleNext}
-              className="flex-1 bg-green-500 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
+              className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
             >
               Correct! Next <ArrowRight className="w-6 h-6" />
             </motion.button>
@@ -499,7 +499,7 @@ const SentenceBuilder = ({ onComplete }: { onComplete: () => void }) => {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               onClick={resetAttempt}
-              className="flex-1 bg-red-500 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
+              className="flex-1 bg-rose-500 text-white py-4 rounded-2xl font-bold text-xl shadow-lg flex items-center justify-center gap-2"
             >
               Try Again <RotateCcw className="w-6 h-6" />
             </motion.button>
@@ -526,21 +526,26 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 font-sans text-slate-900 selection:bg-blue-200 flex flex-col">
+    <div className="min-h-screen bg-cyan-50 font-sans text-slate-900 selection:bg-teal-200 flex flex-col relative overflow-hidden">
+      {/* Decorative Bubbles (CSS added at bottom) */}
+      <div className="bubbles" aria-hidden="true">
+        {[...Array(10)].map((_, i) => <div className="bubble" key={i}></div>)}
+      </div>
+
       {/* Header */}
-      <header className="bg-white shadow-sm px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+      <header className="bg-white/80 backdrop-blur-sm shadow-sm px-6 py-4 flex items-center justify-between sticky top-0 z-10 border-b border-cyan-100">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('menu')}>
-          <div className="bg-blue-500 p-2 rounded-xl">
-            <Zap className="w-6 h-6 text-white" />
+          <div className="bg-teal-500 p-2 rounded-xl">
+            <Anchor className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-gray-800">
-            Spanish<span className="text-blue-500">Quest</span>
+          <h1 className="text-2xl font-black tracking-tight text-slate-800">
+            Spanish<span className="text-teal-500">Reef</span>
           </h1>
         </div>
         {view !== 'menu' && view !== 'success' && (
           <button 
             onClick={() => setView('menu')}
-            className="text-gray-500 hover:text-gray-800 font-bold flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg transition-colors"
+            className="text-cyan-700 hover:text-cyan-900 font-bold flex items-center gap-2 bg-cyan-100 px-4 py-2 rounded-lg transition-colors"
           >
             <Home className="w-5 h-5" />
             <span className="hidden sm:inline">Menu</span>
@@ -549,7 +554,7 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center p-6 sm:p-8">
+      <main className="flex-1 flex items-center justify-center p-6 sm:p-8 relative z-10">
         <AnimatePresence mode="wait">
           {view === 'menu' && (
             <motion.div 
@@ -560,47 +565,47 @@ export default function App() {
               className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6"
             >
               <div className="md:col-span-3 text-center mb-6">
-                <h2 className="text-4xl sm:text-5xl font-black text-gray-800 mb-4">Ready to learn?</h2>
-                <p className="text-xl text-gray-500 font-medium">Choose a mini-game to master your Spanish chores and grammar.</p>
+                <h2 className="text-4xl sm:text-5xl font-black text-slate-800 mb-4">Ready to dive in?</h2>
+                <p className="text-xl text-slate-500 font-medium">Choose a mini-game to master your Spanish chores and grammar.</p>
               </div>
 
               <motion.button
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setView('vocab')}
-                className="bg-white rounded-3xl p-8 shadow-xl border-b-8 border-blue-500 flex flex-col items-center text-center group transition-all"
+                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-b-8 border-cyan-500 flex flex-col items-center text-center group transition-all"
               >
-                <div className="bg-blue-100 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform">
-                  <BookOpen className="w-12 h-12 text-blue-500" />
+                <div className="bg-cyan-100 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform">
+                  <Fish className="w-12 h-12 text-cyan-600" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-800 mb-2">Vocab Flashcards</h3>
-                <p className="text-gray-500 font-medium">Master household chores and frequency words.</p>
+                <h3 className="text-2xl font-black text-slate-800 mb-2">Vocab Flashcards</h3>
+                <p className="text-slate-500 font-medium">Master household chores and frequency words.</p>
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setView('grammar')}
-                className="bg-white rounded-3xl p-8 shadow-xl border-b-8 border-purple-500 flex flex-col items-center text-center group transition-all"
+                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-b-8 border-teal-500 flex flex-col items-center text-center group transition-all"
               >
-                <div className="bg-purple-100 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform">
-                  <Brain className="w-12 h-12 text-purple-500" />
+                <div className="bg-teal-100 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform">
+                  <Waves className="w-12 h-12 text-teal-600" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-800 mb-2">Grammar Quiz</h3>
-                <p className="text-gray-500 font-medium">Practice Ser vs Estar and Hacer vs Poner.</p>
+                <h3 className="text-2xl font-black text-slate-800 mb-2">Grammar Quiz</h3>
+                <p className="text-slate-500 font-medium">Practice Ser vs Estar and Hacer vs Poner.</p>
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.03, y: -5 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setView('translate')}
-                className="bg-white rounded-3xl p-8 shadow-xl border-b-8 border-pink-500 flex flex-col items-center text-center group transition-all"
+                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-b-8 border-blue-500 flex flex-col items-center text-center group transition-all"
               >
-                <div className="bg-pink-100 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform">
-                  <Gamepad2 className="w-12 h-12 text-pink-500" />
+                <div className="bg-blue-100 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform">
+                  <Droplets className="w-12 h-12 text-blue-600" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-800 mb-2">Sentence Builder</h3>
-                <p className="text-gray-500 font-medium">Translate sentences by connecting words.</p>
+                <h3 className="text-2xl font-black text-slate-800 mb-2">Sentence Builder</h3>
+                <p className="text-slate-500 font-medium">Translate sentences by connecting words.</p>
               </motion.button>
             </motion.div>
           )}
@@ -631,12 +636,27 @@ export default function App() {
         </AnimatePresence>
       </main>
       
-      {/* Global CSS for 3D transforms */}
+      {/* Global CSS for 3D transforms & Bubbles */}
       <style dangerouslySetInnerHTML={{__html: `
         .perspective-1000 { perspective: 1000px; }
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
+
+        /* Animated Bubbles */
+        .bubbles { position: absolute; width: 100%; height: 100%; z-index: 0; overflow: hidden; top: 0; left: 0; pointer-events: none; }
+        .bubble { position: absolute; bottom: -20px; width: 20px; height: 20px; background: rgba(255,255,255,0.4); border-radius: 50%; opacity: 0; animation: float 10s infinite ease-in; }
+        .bubble:nth-child(1) { left: 10%; animation-duration: 8s; animation-delay: 1s; width: 40px; height: 40px; }
+        .bubble:nth-child(2) { left: 20%; animation-duration: 5s; animation-delay: 2s; width: 15px; height: 15px; }
+        .bubble:nth-child(3) { left: 35%; animation-duration: 7s; animation-delay: 4s; width: 30px; height: 30px; }
+        .bubble:nth-child(4) { left: 50%; animation-duration: 11s; animation-delay: 0s; width: 25px; height: 25px; background: rgba(20, 184, 166, 0.2); }
+        .bubble:nth-child(5) { left: 65%; animation-duration: 6s; animation-delay: 3s; width: 10px; height: 10px; }
+        .bubble:nth-child(6) { left: 75%; animation-duration: 9s; animation-delay: 1s; width: 35px; height: 35px; }
+        .bubble:nth-child(7) { left: 85%; animation-duration: 12s; animation-delay: 5s; width: 20px; height: 20px; }
+        .bubble:nth-child(8) { left: 90%; animation-duration: 8s; animation-delay: 2s; width: 45px; height: 45px; }
+        .bubble:nth-child(9) { left: 55%; animation-duration: 10s; animation-delay: 6s; width: 18px; height: 18px; background: rgba(6, 182, 212, 0.2); }
+        .bubble:nth-child(10) { left: 5%; animation-duration: 9s; animation-delay: 4s; width: 28px; height: 28px; }
+        @keyframes float { 0% { opacity: 0; transform: translateY(0) scale(0.8); } 20% { opacity: 1; transform: translateY(-20vh) scale(1); } 100% { opacity: 0; transform: translateY(-100vh) scale(1.2); } }
       `}} />
     </div>
   );
